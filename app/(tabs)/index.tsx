@@ -1,70 +1,135 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { PressableScale } from '@/components/buttons/PressableScale';
+import { ShoppingListCard } from '@/components/cards/ShoppingListCard';
+import { Icon } from '@/components/icon/Icon';
+import { HeadingText } from '@/components/text/HeadingText';
+import { Colors } from '@/constants/Colors';
+import { Link } from 'expo-router';
+import { StyleSheet, ScrollView, Alert } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const DATA = [
+  {
+    id: '1',
+    title: 'Lista de compras',
+    description: 'Lista de compras para a semana',
+  },
+  {
+    id: '2',
+    title: 'Lista de compras pro churrasco',
+    description: 'Lista de compras para o churrasco do fim de semana',
+  },
+  {
+    id: '3',
+    title: 'Lista de compras pro nosso RPG de quinta',
+    description: 'Lista de compras para o RPG de quinta-feira',
+  },
+  {
+    id: '4',
+    title: 'Lista de compras pra nossa viagem para a praia no feriado',
+    description: 'Lista de compras para a viagem para a praia no feriado',
+  },
+  {
+    id: '5',
+    title: 'Lista de compras',
+    description: 'Lista de compras para a semana',
+  },
+  {
+    id: '6',
+    title: 'Lista de compras pro churrasco',
+    description: 'Lista de compras para o churrasco do fim de semana',
+  },
+  {
+    id: '7',
+    title: 'Lista de compras pro nosso RPG de quinta',
+    description: 'Lista de compras para o RPG de quinta-feira',
+  },
+  {
+    id: '8',
+    title: 'Lista de compras pra nossa viagem para a praia no feriado',
+    description: 'Lista de compras para a viagem para a praia no feriado',
+  },
+  {
+    id: '9',
+    title: 'Lista de compras',
+    description: 'Lista de compras para a semana',
+  },
+  {
+    id: '10',
+    title: 'Lista de compras pro churrasco',
+    description: 'Lista de compras para o churrasco do fim de semana',
+  },
+  {
+    id: '11',
+    title: 'Lista de compras pro nosso RPG de quinta',
+    description: 'Lista de compras para o RPG de quinta-feira',
+  },
+  {
+    id: '12',
+    title: 'Lista de compras pra nossa viagem para a praia no feriado',
+    description: 'Lista de compras para a viagem para a praia no feriado',
+  },
+];
 
 export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaProvider>
+      <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.container}>
+          <HeadingText style={styles.heading}>Minhas listas</HeadingText>
+          {DATA.map((item) => (
+            <Link key={item.id} href='/edit-shopping-list' asChild>
+              <ShoppingListCard
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                description={item.description}
+                onDelete={() => {
+                  Alert.alert(
+                    'Deletar lista',
+                    'Deseja realmente deletar a lista?',
+                    [
+                      {
+                        text: 'Cancelar',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'Deletar',
+                        style: 'destructive',
+                      },
+                    ]
+                  );
+                }}
+              />
+            </Link>
+          ))}
+        </ScrollView>
+        <Link href='/create-shopping-list' asChild>
+          <PressableScale style={styles.fab} onPress={() => {}}>
+            <Icon name='plus' size={32} color={Colors.beta} />
+          </PressableScale>
+        </Link>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    paddingVertical: 24,
+    paddingBottom: 120,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  heading: {
+    paddingHorizontal: 16,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  fab: {
     position: 'absolute',
+    bottom: 16,
+    right: 12,
+    borderRadius: 32,
+    backgroundColor: Colors.alfa,
+    width: 64,
+    height: 64,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
